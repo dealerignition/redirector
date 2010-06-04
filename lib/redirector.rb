@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'base64'
+require 'yaml'
 
 get '/*' do
   from_host = request.env['HTTP_HOST']
