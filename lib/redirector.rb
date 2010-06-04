@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-require 'base64'
 require 'yaml'
 require 'cgi'
 
@@ -23,5 +22,5 @@ def redirect_notice(from, to)
 You accessed this site as <strong>#{from}</strong>. The address has been changed to <strong>#{to}</strong>.
 Please update any bookmarks or shortcuts you may be using.
   MSG
-  "message=" + CGI.escape(Base64.encode64([:warning, message].to_yaml))
+  "message=" + CGI.escape([:error, message].to_yaml)
 end
