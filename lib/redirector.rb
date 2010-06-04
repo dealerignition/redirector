@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'base64'
 require 'yaml'
+require 'uri'
 
 get '/*' do
   from_host = request.env['HTTP_HOST']
@@ -22,5 +23,5 @@ def redirect_notice(from, to)
 You accessed this site as <strong>#{from}</strong>. The address has been changed to <strong>#{to}</strong>.
 Please update any bookmarks or shortcuts you may be using.
   MSG
-  "message=" + Base64.encode64([:warning, message].to_yaml).gsub("\n", '')
+  "message=" + URI.encode(Base64.encode64([:warning, message].to_yaml))
 end
