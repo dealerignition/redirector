@@ -64,6 +64,32 @@ describe 'The Redirector App' do
         redirect_url.should be_end_with app.send(:redirect_notice, 'blah.coopsem.com', 'blah.dealerignitionapp.com')
       end
     end
+
+    context 'redirecting ad urls' do
+      context 'old ad urls' do
+        it 'should redirect to the diadz.com domain' do
+          get "/dealer/1/size/1.js", nil, http_host
+          redirect_url.should =~ %r{^http://diadz.com/dealer/1/size/1.js}
+        end
+
+        it 'should not include the message' do
+          get "/dealer/1/size/1.js", nil, http_host
+          redirect_url.should_not =~ %r{message=}
+        end
+      end
+      
+      context 'newer ad urls' do
+        it 'should redirect to the diadz.com domain' do
+          get "/a/1/2/1.js", nil, http_host
+          redirect_url.should =~ %r{^http://diadz.com/a/1/2/1.js}
+        end
+
+        it 'should not include the message' do
+          get "/a/1/2/1.js", nil, http_host
+          redirect_url.should_not =~ %r{message=}
+        end
+      end
+    end
   end
 end
 

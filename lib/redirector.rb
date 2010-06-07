@@ -5,8 +5,7 @@ require 'cgi'
 
 get '/*' do
   from_host = request.env['HTTP_HOST']
-  to_host = request.env['HTTP_HOST'] =~ /(.*?\.)coopsem.com/ ? $1 : ''
-  to_host << "dealerignitionapp.com"
+  to_host = new_host_name
   
   response = "http#{request.secure? ? 's' : ''}://"
   response << to_host
@@ -17,10 +16,25 @@ get '/*' do
   redirect response, 301
 end
 
+def new_host_name
+  if !request.env['PATH_INFO'].empty? and
+      (request.env['PATH_INFO'] =~ %r{/dealer/\d+/size/\d+.js} or
+       request.env['PATH_INFO'] =~ %r{/a/\d+/\d+/\d+.js})
+    'diadz.com'
+  else
+    to_host = request.env['HTTP_HOST'] =~ /(.*?\.)coopsem.com/ ? $1 : ''
+    to_host << "dealerignitionapp.com"
+  end
+end
+
 def redirect_notice(from, to)
-  message = <<-MSG
+  if to !~ /diadz.com/
+    message = <<-MSG
 You accessed this site as <strong>#{from}</strong>. The address has been changed to <strong>#{to}</strong>.
 Please update any bookmarks or shortcuts you may be using.
-  MSG
-  "message=" + CGI.escape([:error, message].to_yaml)
+    MSG
+    "message=" + CGI.escape([:error, message].to_yaml)
+  else
+    ''
+  end
 end
